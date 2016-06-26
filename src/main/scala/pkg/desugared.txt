@@ -1,0 +1,204 @@
+[[syntax trees at end of                     typer]] // Main.scala
+package pkg {
+  import scala.trace._;
+  object Main extends scala.AnyRef {
+    def <init>(): pkg.Main.type = {
+      Main.super.<init>();
+      ()
+    };
+    abstract trait IntFunctor extends scala.AnyRef {
+      def map(f: Int => Int): pkg.Main.IntFunctor
+    };
+    abstract trait IntMonad extends scala.AnyRef {
+      def flatMap(f: Int => pkg.Main.IdentityMonad): pkg.Main.IntMonad
+    };
+    case class IdentityMonad extends AnyRef with pkg.Main.IntFunctor with pkg.Main.IntMonad with Product with Serializable {
+      <caseaccessor> <paramaccessor> private[this] val i: Int = _;
+      <stable> <caseaccessor> <accessor> <paramaccessor> def i: Int = IdentityMonad.this.i;
+      def <init>(i: Int): pkg.Main.IdentityMonad = {
+        IdentityMonad.super.<init>();
+        ()
+      };
+      override def map(f: Int => Int): pkg.Main.IdentityMonad = Main.this.IdentityMonad.apply(f.apply(IdentityMonad.this.i));
+      override def flatMap(f: Int => pkg.Main.IdentityMonad): pkg.Main.IdentityMonad = f.apply(IdentityMonad.this.i);
+      <synthetic> def copy(i: Int = i): pkg.Main.IdentityMonad = new IdentityMonad(i);
+      <synthetic> def copy$default$1: Int = IdentityMonad.this.i;
+      override <synthetic> def productPrefix: String = "IdentityMonad";
+      <synthetic> def productArity: Int = 1;
+      <synthetic> def productElement(x$1: Int): Any = x$1 match {
+        case 0 => IdentityMonad.this.i
+        case _ => throw new IndexOutOfBoundsException(x$1.toString())
+      };
+      override <synthetic> def productIterator: Iterator[Any] = runtime.this.ScalaRunTime.typedProductIterator[Any](IdentityMonad.this);
+      <synthetic> def canEqual(x$1: Any): Boolean = x$1.$isInstanceOf[pkg.Main.IdentityMonad]();
+      override <synthetic> def hashCode(): Int = {
+        <synthetic> var acc: Int = -889275714;
+        acc = Statics.this.mix(acc, i);
+        Statics.this.finalizeHash(acc, 1)
+      };
+      override <synthetic> def toString(): String = ScalaRunTime.this._toString(IdentityMonad.this);
+      override <synthetic> def equals(x$1: Any): Boolean = IdentityMonad.this.eq(x$1.asInstanceOf[Object]).||(x$1 match {
+  case (_: pkg.Main.IdentityMonad) => true
+  case _ => false
+}.&&({
+        <synthetic> val IdentityMonad$1: pkg.Main.IdentityMonad = x$1.asInstanceOf[pkg.Main.IdentityMonad];
+        IdentityMonad.this.i.==(IdentityMonad$1.i).&&(IdentityMonad$1.canEqual(IdentityMonad.this))
+      }))
+    };
+    <synthetic> object IdentityMonad extends scala.runtime.AbstractFunction1[Int,pkg.Main.IdentityMonad] with Serializable {
+      def <init>(): pkg.Main.IdentityMonad.type = {
+        IdentityMonad.super.<init>();
+        ()
+      };
+      final override <synthetic> def toString(): String = "IdentityMonad";
+      case <synthetic> def apply(i: Int): pkg.Main.IdentityMonad = new IdentityMonad(i);
+      case <synthetic> def unapply(x$0: pkg.Main.IdentityMonad): Option[Int] = if (x$0.==(null))
+        scala.this.None
+      else
+        Some.apply[Int](x$0.i);
+      <synthetic> private def readResolve(): Object = Main.this.IdentityMonad
+    };
+    def main(args: Array[String]): Unit = {
+      scala.trace.`package`.implicitlyTraceable[String]("Hello Monad!").traceStdOut;
+      val intMonad1: pkg.Main.IdentityMonad = Main.this.IdentityMonad.apply(1);
+      val intMonad2: pkg.Main.IdentityMonad = intMonad1.map(((x$1: Int) => x$1.+(1)));
+      val intMonad3: pkg.Main.IdentityMonad = intMonad2.flatMap(((int: Int) => Main.this.IdentityMonad.apply(int.+(1))));
+      val intMonad7: pkg.Main.IdentityMonad = intMonad3.flatMap(((three: Int) => Main.this.IdentityMonad.apply(three.+(1)).map(((x$2: Int) => three.+(x$2)))));
+      scala.trace.`package`.implicitlyTraceable[String](scala.StringContext.apply("", " ", " ", " ", "").s(intMonad1, intMonad2, intMonad3, intMonad7)).traceStdOut;
+      scala.trace.`package`.implicitlyTraceable[String]("Now with do-while notation (for-yield in Scala is like do-while in Haskell)").traceStdOut;
+      val intMonad7redo: pkg.Main.IdentityMonad = intMonad3.flatMap(((three: Int) => Main.this.IdentityMonad.apply(three.+(1)).map(((four: Int) => three.+(four)))));
+      scala.trace.`package`.implicitlyTraceable[pkg.Main.IdentityMonad](intMonad7redo).traceStdOut;
+      Main.this.testStateMonad()
+    };
+    abstract trait Monad[T] extends scala.AnyRef {
+      import scala.language.higherKinds;
+      type StateMonadT[_] <: pkg.Main.Monad[_];
+      def flatMap[B](f: T => Monad.this.StateMonadT[B]): Monad.this.StateMonadT[B]
+    };
+    case class StateMonad[StateT, ResultT] extends AnyRef with pkg.Main.Monad[ResultT] with Product with Serializable {
+      <caseaccessor> <paramaccessor> private[this] val run: StateT => (ResultT, StateT) = _;
+      <stable> <caseaccessor> <accessor> <paramaccessor> def run: StateT => (ResultT, StateT) = StateMonad.this.run;
+      def <init>(run: StateT => (ResultT, StateT)): pkg.Main.StateMonad[StateT,ResultT] = {
+        StateMonad.super.<init>();
+        ()
+      };
+      override type StateMonadT[_] = pkg.Main.StateMonad[StateT, _];
+      def map[Result2T](f: ResultT => Result2T): pkg.Main.StateMonad[StateT,Result2T] = Main.this.StateMonad.apply[StateT, Result2T](((int: StateT) => {
+        <synthetic> <artifact> private[this] val x$3: (ResultT, StateT) = (StateMonad.this.run.apply(int): (ResultT, StateT) @unchecked) match {
+          case (_1: ResultT, _2: StateT)(ResultT, StateT)((a @ _), (newInt @ _)) => scala.Tuple2.apply[ResultT, StateT](a, newInt)
+        };
+        val a: ResultT = x$3._1;
+        val newInt: StateT = x$3._2;
+        scala.Tuple2.apply[Result2T, StateT](f.apply(a), newInt)
+      }));
+      override def flatMap[Result2T](f: ResultT => StateMonad.this.StateMonadT[Result2T]): StateMonad.this.StateMonadT[Result2T] = Main.this.StateMonad.apply[StateT, Any](((int: StateT) => {
+        <synthetic> <artifact> private[this] val x$4: (ResultT, StateT) = (StateMonad.this.run.apply(int): (ResultT, StateT) @unchecked) match {
+          case (_1: ResultT, _2: StateT)(ResultT, StateT)((a @ _), (newInt @ _)) => scala.Tuple2.apply[ResultT, StateT](a, newInt)
+        };
+        val a: ResultT = x$4._1;
+        val newInt: StateT = x$4._2;
+        val intermediary: pkg.Main.StateMonad[StateT, _] = f.apply(a);
+        intermediary.run.apply(newInt)
+      }));
+      <synthetic> def copy[StateT, ResultT](run: StateT => (ResultT, StateT) = run): pkg.Main.StateMonad[StateT,ResultT] = new pkg.Main.StateMonad[StateT,ResultT](run);
+      <synthetic> def copy$default$1[StateT, ResultT]: StateT => (ResultT, StateT) = StateMonad.this.run;
+      override <synthetic> def productPrefix: String = "StateMonad";
+      <synthetic> def productArity: Int = 1;
+      <synthetic> def productElement(x$1: Int): Any = x$1 match {
+        case 0 => StateMonad.this.run
+        case _ => throw new IndexOutOfBoundsException(x$1.toString())
+      };
+      override <synthetic> def productIterator: Iterator[Any] = runtime.this.ScalaRunTime.typedProductIterator[Any](StateMonad.this);
+      <synthetic> def canEqual(x$1: Any): Boolean = x$1.$isInstanceOf[pkg.Main.StateMonad[_, _]]();
+      override <synthetic> def hashCode(): Int = ScalaRunTime.this._hashCode(StateMonad.this);
+      override <synthetic> def toString(): String = ScalaRunTime.this._toString(StateMonad.this);
+      override <synthetic> def equals(x$1: Any): Boolean = StateMonad.this.eq(x$1.asInstanceOf[Object]).||(x$1 match {
+  case (_: pkg.Main.StateMonad[StateT,ResultT]) => true
+  case _ => false
+}.&&({
+        <synthetic> val StateMonad$1: pkg.Main.StateMonad[StateT,ResultT] = x$1.asInstanceOf[pkg.Main.StateMonad[StateT,ResultT]];
+        StateMonad.this.run.==(StateMonad$1.run).&&(StateMonad$1.canEqual(StateMonad.this))
+      }))
+    };
+    <synthetic> object StateMonad extends AnyRef with Serializable {
+      def <init>(): pkg.Main.StateMonad.type = {
+        StateMonad.super.<init>();
+        ()
+      };
+      final override <synthetic> def toString(): String = "StateMonad";
+      case <synthetic> def apply[StateT, ResultT](run: StateT => (ResultT, StateT)): pkg.Main.StateMonad[StateT,ResultT] = new pkg.Main.StateMonad[StateT,ResultT](run);
+      case <synthetic> def unapply[StateT, ResultT](x$0: pkg.Main.StateMonad[StateT,ResultT]): Option[StateT => (ResultT, StateT)] = if (x$0.==(null))
+        scala.this.None
+      else
+        Some.apply[StateT => (ResultT, StateT)](x$0.run);
+      <synthetic> private def readResolve(): Object = Main.this.StateMonad
+    };
+    def testStateMonad(): Unit = {
+      val incrementingStateMonad: pkg.Main.StateMonad[Int,Float] = Main.this.StateMonad.apply[Int, Float](((state: Int) => scala.Tuple2.apply[Float, Int](state.toFloat, state.+(1))));
+      {
+        val one: Int = 1;
+        <synthetic> <artifact> private[this] val x$5: (Float, Int) = (incrementingStateMonad.run.apply(one): (Float, Int) @unchecked) match {
+          case (_1: Float, _2: Int)(Float, Int)((twoFloat @ _), (two @ _)) => scala.Tuple2.apply[Float, Int](twoFloat, two)
+        };
+        val twoFloat: Float = x$5._1;
+        val two: Int = x$5._2;
+        <synthetic> <artifact> private[this] val x$6: (Float, Int) = (incrementingStateMonad.run.apply(two): (Float, Int) @unchecked) match {
+          case (_1: Float, _2: Int)(Float, Int)((threeFloat @ _), (three @ _)) => scala.Tuple2.apply[Float, Int](threeFloat, three)
+        };
+        val threeFloat: Float = x$6._1;
+        val three: Int = x$6._2;
+        <synthetic> <artifact> private[this] val x$7: (Float, Int) = (incrementingStateMonad.run.apply(three): (Float, Int) @unchecked) match {
+          case (_1: Float, _2: Int)(Float, Int)((fourFloat @ _), (four @ _)) => scala.Tuple2.apply[Float, Int](fourFloat, four)
+        };
+        val fourFloat: Float = x$7._1;
+        val four: Int = x$7._2;
+        ()
+      };
+      val toDoubleStateMonad: pkg.Main.StateMonad[Int,Double] = incrementingStateMonad.map[Double](((float: Float) => float.toDouble));
+      {
+        val one: Int = 1;
+        <synthetic> <artifact> private[this] val x$8: (Double, Int) = (toDoubleStateMonad.run.apply(one): (Double, Int) @unchecked) match {
+          case (_1: Double, _2: Int)(Double, Int)((twoDouble @ _), (two @ _)) => scala.Tuple2.apply[Double, Int](twoDouble, two)
+        };
+        val twoDouble: Double = x$8._1;
+        val two: Int = x$8._2;
+        <synthetic> <artifact> private[this] val x$9: (Double, Int) = (toDoubleStateMonad.run.apply(two): (Double, Int) @unchecked) match {
+          case (_1: Double, _2: Int)(Double, Int)((threeDouble @ _), (three @ _)) => scala.Tuple2.apply[Double, Int](threeDouble, three)
+        };
+        val threeDouble: Double = x$9._1;
+        val three: Int = x$9._2;
+        <synthetic> <artifact> private[this] val x$10: (Double, Int) = (toDoubleStateMonad.run.apply(three): (Double, Int) @unchecked) match {
+          case (_1: Double, _2: Int)(Double, Int)((fourDouble @ _), (four @ _)) => scala.Tuple2.apply[Double, Int](fourDouble, four)
+        };
+        val fourDouble: Double = x$10._1;
+        val four: Int = x$10._2;
+        scala.trace.`package`.implicitlyTraceable[String](scala.StringContext.apply("", " ", " ", "").s(twoDouble, threeDouble, fourDouble)).traceStdOut;
+        scala.trace.`package`.implicitlyTraceable[String](scala.StringContext.apply("", " ", " ", "").s(two, three, four)).traceStdOut
+      };
+      val toDoubleFlatMapMonad: pkg.Main.StateMonad[Int, _] = incrementingStateMonad.flatMap[Nothing](((float: Float) => Main.this.StateMonad.apply[Int, Double](((int: Int) => scala.Tuple2.apply[Double, Int](float.toDouble, int)))));
+      {
+        val one: Int = 1;
+        <synthetic> <artifact> private[this] val x$11: (Any, Int) = (toDoubleFlatMapMonad.run.apply(one): (_$2, Int) @unchecked) match {
+          case (_1: Any, _2: Int)(Any, Int)((twoDouble @ _), (two @ _)) => scala.Tuple2.apply[Any, Int](twoDouble, two)
+        };
+        val twoDouble: Any = x$11._1;
+        val two: Int = x$11._2;
+        <synthetic> <artifact> private[this] val x$12: (Any, Int) = (toDoubleFlatMapMonad.run.apply(two): (_$2, Int) @unchecked) match {
+          case (_1: Any, _2: Int)(Any, Int)((threeDouble @ _), (three @ _)) => scala.Tuple2.apply[Any, Int](threeDouble, three)
+        };
+        val threeDouble: Any = x$12._1;
+        val three: Int = x$12._2;
+        <synthetic> <artifact> private[this] val x$13: (Any, Int) = (toDoubleFlatMapMonad.run.apply(three): (_$2, Int) @unchecked) match {
+          case (_1: Any, _2: Int)(Any, Int)((fourDouble @ _), (four @ _)) => scala.Tuple2.apply[Any, Int](fourDouble, four)
+        };
+        val fourDouble: Any = x$13._1;
+        val four: Int = x$13._2;
+        scala.trace.`package`.implicitlyTraceable[String](scala.StringContext.apply("", " ", " ", "").s(twoDouble, threeDouble, fourDouble)).traceStdOut;
+        {
+          scala.trace.`package`.implicitlyTraceable[String](scala.StringContext.apply("", " ", " ", "").s(two, three, four)).traceStdOut;
+          ()
+        }
+      }
+    }
+  }
+}
